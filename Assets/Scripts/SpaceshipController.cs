@@ -13,8 +13,9 @@ public class SpaceshipController : MonoBehaviour {
 	private float currentSpeed = 0;
 	private bool didAccelerate = false;
 	private int rotationDirection = 0;
-	private GameObject mainGunProjectile;
 	private float mainGunShootDelta = 0;
+	private Transform mainGunTransform;
+	private ParticleEmitter rocketEngine;
 
 	public bool rotateEnabled = true;
 	public float maxSpeed = 0.2f;
@@ -22,11 +23,13 @@ public class SpaceshipController : MonoBehaviour {
 	public float friction = 0.3f;
 	public float rotationalSpeed = 100f;
 	public Camera camera;
+	public GameObject mainGunProjectile;
 	public float mainGunShootFrequency = 0.1f;
 
 	// Use this for initialization
 	void Start () {
-		mainGunProjectile = Resources.Load ("Prefabs/RayPrefab") as GameObject;
+		mainGunTransform = transform.FindChild ("MainGunShooter");
+		rocketEngine = transform.FindChild ("RocketEngine").particleEmitter;
 	}
 	
 	// Update is called once per frame
@@ -40,9 +43,11 @@ public class SpaceshipController : MonoBehaviour {
 	void UpdateInput() {
 		didAccelerate = false;
 		rotationDirection = 0;
+		rocketEngine.emit = false;
 
 		if (Input.GetKey(KeyCode.UpArrow)) {
 			didAccelerate = true;
+			rocketEngine.emit = true;
 		}
 
 		if (Input.GetKey(KeyCode.RightArrow)) {
@@ -93,7 +98,6 @@ public class SpaceshipController : MonoBehaviour {
 
 	void ShootMainGun() {
 		if (mainGunShootDelta > mainGunShootFrequency) {
-			Transform mainGunTransform = transform.FindChild ("MainGunShooter");
 			GameObject ray = Instantiate (mainGunProjectile, mainGunTransform.position, mainGunTransform.rotation) as GameObject;
 			ray.rigidbody2D.AddForce(transform.up * 10, ForceMode2D.Impulse);
 
