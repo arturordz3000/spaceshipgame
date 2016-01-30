@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RayController : MonoBehaviour {
+public class RayController : Projectile {
 
 	public AudioClip soundEffect;
+	public float speed = 0.1f;
+
 	private AudioSource audioPlayer;
 
 	// Use this for initialization
@@ -11,11 +13,10 @@ public class RayController : MonoBehaviour {
 		audioPlayer = GetComponent<AudioSource> ();
 		audioPlayer.PlayOneShot (soundEffect);
 	}
-
-
 	
 	// Update is called once per frame
 	void Update () {
+		transform.position += Vector3.up * speed;
 		DestroyIfOutOfScreen ();
 	}
 

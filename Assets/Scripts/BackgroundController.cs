@@ -3,7 +3,8 @@ using System.Collections;
 
 public class BackgroundController : MonoBehaviour {
 
-	public bool scrollEnabled = false;
+	public bool scrollEnabled = true;
+	public float scrollSpeed = 0.1f;
 	public SpaceshipController mainCharacter;
 
 	// Use this for initialization
@@ -14,8 +15,10 @@ public class BackgroundController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (scrollEnabled) {
-			Vector2 offset = new Vector2(mainCharacter.transform.up.x, mainCharacter.transform.up.y);
-			renderer.material.mainTextureOffset += offset * mainCharacter.GetCurrentSpeed() * Time.deltaTime;
+			Vector2 offset = new Vector2(0, 1);
+			renderer.material.mainTextureOffset += offset * scrollSpeed * Time.deltaTime;
 		}
+
+		mainCharacter.rocketEngine.emit = scrollEnabled;
 	}
 }
