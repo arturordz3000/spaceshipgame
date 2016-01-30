@@ -5,17 +5,21 @@ public class EnemyController : MonoBehaviour {
 
 	private Vector3 velocityToTarget = Vector3.zero;
 
-	public float speed = 1.0f;
+	public float maxSpeed = 2.0f;
 	public GameObject debugTarget;
+	public static bool shouldMove = true;
 
 	// Use this for initialization
 	void Start () {
-		SetTarget (debugTarget);
+		if (debugTarget != null)
+			SetTarget (debugTarget);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		this.transform.position += velocityToTarget * Time.deltaTime;
+		if (shouldMove) {
+			this.transform.position += velocityToTarget * Time.deltaTime;
+		}
 	}
 
 	void OnCollisionEnter2D (Collision2D collision) {
@@ -28,6 +32,10 @@ public class EnemyController : MonoBehaviour {
 		Vector3 targetPosition = target.transform.position;
 
 		Vector3 distanceVector = targetPosition - position;
-		velocityToTarget = distanceVector * speed;
+		velocityToTarget = distanceVector * RandomizeSpeed();
+	}
+
+	private float RandomizeSpeed() {
+		return maxSpeed * Random.Range(0f, 1.0f);
 	}
 }
